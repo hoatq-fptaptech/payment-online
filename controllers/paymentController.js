@@ -144,7 +144,7 @@ exports.createVnpayPayment = async (req, res) => {
         return res.status(400).json({ error: 'Số tiền không hợp lệ' });
       }
   
-      const webhookTxnRef = uuidv4();
+      const webhookTxnRef = uuidv4().replace(/-/g, '');
   
       const transaction = new Transaction({
         amount,
