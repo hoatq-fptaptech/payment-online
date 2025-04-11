@@ -182,7 +182,7 @@ exports.createVnpayPayment = async (req, res) => {
         try {
             const amount = transactionDetail.transferAmount;
             let content = transactionDetail.content;
-            const [prefix, webhookTxnRef,suffix] = content.split('fpt-aptech');
+            const [prefix, webhookTxnRef,suffix] = content.split('fptaptech');
             await Transaction.findOneAndUpdate(
               { webhookTxnRef },
               { status: "success",amount }
