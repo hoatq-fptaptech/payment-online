@@ -206,7 +206,7 @@ exports.createVnpayPayment = async (req, res) => {
       if (status === 'pending') {
           return res.status(200).json({ status: 'pending' });
       } else if (status === 'success') {
-          return res.status(200).json({ status: 'success' });
+          return res.status(200).json({ status: 'success', amount: transaction.amount });
       } else {
           return res.status(400).json({ status: 'failed' });
       }
