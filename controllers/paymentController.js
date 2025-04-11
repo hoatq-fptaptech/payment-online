@@ -162,6 +162,18 @@ exports.createVnpayPayment = async (req, res) => {
     }
   };
   exports.updateQrTransaction = async (req, res) => {
+    const authorizationHeader = req.headers['authorization']; // Lấy header "Authorization"
+
+    if (!authorizationHeader) {
+        return res.status(401).json({ message: 'Authorization header is missing' });
+    }
+    // Kiểm tra header có đúng định dạng "Apikey API_KEY_CUA_BAN"
+    const [scheme, apiKey] = authorizationHeader.split(' ');
+
+    if (scheme !== 'Apikey' || !apiKey || apiKey != process.env.SEPAY_APIKEY) {
+        return res.status(401).json({ message: 'Invalid Authorization format' });
+    }
+
     const transactionDetail = req.body;
     if (!transactionDetail) {
         return res.status(401).json({ message: 'Transaction detail is missing' });
@@ -173,7 +185,7 @@ exports.createVnpayPayment = async (req, res) => {
             const [prefix, webhookTxnRef,suffix] = content.split('fpt-aptech');
             await Transaction.findOneAndUpdate(
               { webhookTxnRef },
-              { status: "success" }
+              { status: "success",amount }
             );
             res.status(201).send({status:true,message:`Ghi nhận giao dịch thành công`});
         }catch(error){
